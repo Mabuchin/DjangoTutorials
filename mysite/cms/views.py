@@ -4,9 +4,10 @@
 from django.shortcuts import render_to_response,get_object_or_404,redirect
 from django.http import HttpResponse
 from django.template import RequestContext
-from cms.models import Book
-from cms.forms import BookForm
+from cms.models import Book,Impression
+from cms.forms import BookForm,ImpressionForm
 from django.views.generic.list import ListView
+
 
 def book_list(request):
 #	return HttpResponse(u'書籍の一覧')
@@ -53,11 +54,31 @@ class ImpressionList(ListView):
 		context = self.get_context_data(object_list = self.object_list,book = book)
 		return self.render_to_response(context)
 
+def impression_edit(request,book_id,impression_id=None):
 
 
+	#親の書籍を読み込む
+	book = get_object_or_404(Book, pk=book_id)
+	#修正/追加ページに表示させるデータのセット
+	if impression_id:#impression_idの指定がある
+		impression = get_object_or_404(Impression,pk=impression_id)
+	else:
+		impression = Impression()
 
+	#POSTなら修正/追加ページからデータ登録へ
+	if request.method == 'POST':
+		form = ImpressionForm(request.POST, instance=impression) #POSTされたrequestデータからフォーム生成
+		if form.is_valid():
+			impression = form.save(commit = False)
+			impression.book = book#親をセット
+			impression.save()
+			return redirect('cms:impression_list',book_id = book_id)
 
+	else:#GETの場合はフォーム画面表示をする
+		#impressionの型をセットする
+		form = ImpressionForm(instance=impression)
 
+	return render_to_response('cms/impression_edit.html',dict(form=form,book_id=book_id,impression_id=impression_id),context_instance=RequestContext(request))
 
 
 
