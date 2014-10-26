@@ -13,9 +13,9 @@ urlpatterns = patterns('',
 
 	url(r'^impression/(?P<book_id>\d+)/$', views.ImpressionList.as_view(), name = 'impression_list'),
 
-	url(r'^impression/add/(?P<book_id>\d+)/$', views.ImpressionList.as_view(), name = 'impression_add'),
+	url(r'^impression/add/(?P<book_id>\d+)/$',views.impression_edit, name = 'impression_add'),
 
-	url(r'^impression/edit/(?P<book_id>\d+)/(?P<impression_id>\d+)/$', views.ImpressionList.as_view(), name = 'impression_mod'),
+	url(r'^impression/mod/(?P<book_id>\d+)/(?P<impression_id>\d+)/$', views.impression_edit, name = 'impression_mod'),
 
-	url(r'^impression/del/(?P<book_id>\d+)/(?P<impression_id>\d+)/$', views.ImpressionList.as_view(), name = 'impression_del'),
+	url(r'^impression/del/(?P<book_id>\d+)/(?P<impression_id>\d+)/$', views.impression_del, name = 'impression_del'),
 	)

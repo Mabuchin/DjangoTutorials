@@ -80,5 +80,13 @@ def impression_edit(request,book_id,impression_id=None):
 
 	return render_to_response('cms/impression_edit.html',dict(form=form,book_id=book_id,impression_id=impression_id),context_instance=RequestContext(request))
 
+def impression_del(request, book_id , impression_id):
+	'''感想の削除'''
+	impression = get_object_or_404(Impression,pk=impression_id)
+	impression.delete()
+	return redirect('cms:impression_list',book_id=book_id)
+
+
+
 
 
